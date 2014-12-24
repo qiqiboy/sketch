@@ -39,7 +39,7 @@ sketch.on('end',function(){
 
 // @method
 sketch.clear(); //清除画布重新开始
-mask.cancel(num); //上一步，num为取消步数，默认为1
+sketch.cancel(num); //上一步，num为取消步数，默认为1
 
 // erase擦除
 sketch.erase=true; //该属性为true时表示是擦除状态
