@@ -10,10 +10,10 @@ Just a HTML5 sketch-pad.
 // @Class Sketch
 // @param String|HTMLCanvasElement id canvas节点id或者该对象
 // @param Object config 初始画板配置
-                        .width int 画板宽度
-                        .height int 画板高度
-                        .lineWidth int 笔画宽度
-                        .color 笔画颜色
+//                      .width int 画板宽度
+//                      .height int 画板高度
+//                      .lineWidth int 笔画宽度
+//                      .color 笔画颜色
 
 var sketch=new Sketch('canvas',{
     width:document.body.clientWidth,
