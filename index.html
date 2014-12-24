@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Sketch</title>
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<style type="text/css">
+body,div,canvas,img{
+    margin:0;
+    padding:0;
+    border:0;
+}
+html,body{
+    height:100%;
+}
+#wrap{
+    min-height:100%;
+    position:relative;
+}
+#wrap canvas{
+    display:block;
+}
+.ctl{
+	position:absolute;
+	top:10px;
+	text-align:center;
+	left:0;
+	width:100%;
+}
+</style>
+</head>
+<body>
+<div id="wrap">
+    <canvas id="canvas"></canvas>
+	<div class="ctl">
+		<button onclick="sketch.erase=false;">画笔</button><button onclick="sketch.erase=true;">橡皮</button>
+		<button onclick="sketch.lineWidth=2;">细</button><button onclick="sketch.lineWidth=5;">中</button><button onclick="sketch.lineWidth=10;">粗</button>
+		<button onclick="sketch.color='red';">红</button><button onclick="sketch.color='black';">黑</button><button onclick="sketch.color='blue';">蓝</button>
+		<button onclick="sketch.cancel();">上一步</button>
+	</div>
+</div>
+	<script type="text/javascript" src="src/sketch.js"></script>
+    <script>
+        var sketch=new Sketch('canvas',{
+			width:document.body.clientWidth,
+			height:document.body.clientHeight,
+			lineWidth:5,
+			color:'red'
+		});
+    </script>
+</body>
+</html>
