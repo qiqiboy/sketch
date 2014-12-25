@@ -61,7 +61,7 @@
                 },
                 end:function(){
                     if(this.actions[this.steps-1].pens.length<2){
-                        this.actions.splice(-1);
+                        this.actions.pop();
                     }
                 }
             });
