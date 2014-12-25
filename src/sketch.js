@@ -50,8 +50,19 @@
                    });
                 },
                 move:function(){
-                    this.actions[this.steps-1].pens.push(arguments);
-                    this.draw();
+                    var action=this.actions[this.steps-1];
+                    action.pens.push(arguments);
+                    this.draw({
+                        width:action.width,
+                        color:action.color,
+                        erase:action.erase,
+                        pens:action.pens.slice(-2)
+                    });
+                },
+                end:function(){
+                    if(this.actions[this.steps-1].pens.length<=2){
+                        this.actions.splice(-1);
+                    }
                 }
             });
         },
@@ -109,6 +120,7 @@
                 this.events[ev]=[];
             }
             this.events[ev].push(callback);
+            return this;
         },
         fire:function(ev){
             var args=[].slice.call(arguments,1);
@@ -117,36 +129,38 @@
                     callback.apply(this,args);
                 }
             }.bind(this));
+            return this;
         },
-        draw:function(){
+        draw:function(action){
             var ctx=this.ctx;
-            ctx.clearRect(0,0,this.width,this.height);
-            this.actions.forEach(function(action){
-                ctx.lineWidth=action.width;
-                ctx.lineJoin=ctx.lineCap='round';
-                if(action.erase){
-                    ctx.strokeStyle="#000";
-                    ctx.globalCompositeOperation='destination-out';
-                }else{
-                    ctx.globalCompositeOperation='source-over';
-                    ctx.strokeStyle=action.color;
-                }
-                ctx.beginPath();
-                action.pens.forEach(function(pos,step){
-                    ctx[step?'lineTo':'moveTo'].apply(ctx,pos);
-                });
-                ctx.stroke();
-                ctx.closePath();
+            ctx.lineWidth=action.width;
+            ctx.lineJoin=ctx.lineCap='round';
+            if(action.erase){
+                ctx.strokeStyle="#000";
+                ctx.globalCompositeOperation='destination-out';
+            }else{
+                ctx.globalCompositeOperation='source-over';
+                ctx.strokeStyle=action.color;
+            }
+            ctx.beginPath();
+            action.pens.forEach(function(pos,step){
+                ctx[step?'lineTo':'moveTo'].apply(ctx,pos);
             });
+            ctx.stroke();
+            return this;
+        },
+        reDraw:function(){
+            this.ctx.clearRect(0,0,this.width,this.height);
+            this.actions.forEach(this.draw.bind(this));
             return this;
         },
         cancel:function(num){
             this.actions.splice(-(num||1));
-            return this.draw();
+            return this.reDraw();
         },
         clear:function(){
             this.actions.length=0;
-            return this.draw();
+            return this.reDraw();
         },
         toDataUrl:function(type){
             return this.canvas.toDataURL(type);
