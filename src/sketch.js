@@ -144,9 +144,27 @@
             this.actions.splice(-(num||1));
             return this.draw();
         },
-        clear:function(x,y,w){
+        clear:function(){
             this.actions.length=0;
             return this.draw();
+        },
+        toDataUrl:function(type){
+            return this.canvas.toDataURL(type);
+        },
+        toBlob:function(){
+            return (this.canvas.toBlob||function(callback,type){
+                if('mozGetAsFile' in this){
+                    return callback(this.mozGetAsFile('blob',type));
+                }
+                var dataurl=this.toDataURL(type),
+                    bytestr=ROOT.atob(dataurl.split(',')[1]),
+                    buffer=new Uint8Array(bytestr.length),
+                    i,len;
+                for(i=0,len=buffer.length;i<len;i++){
+                    buffer[i]=bytestr.charCodeAt(i);
+                }
+                callback(new Blob([buffer.buffer],{type:type||dataurl.split(',')[0].split(':')[1].split(';')[0]}));
+            }).apply(this.canvas,arguments);
         }
     }
 
