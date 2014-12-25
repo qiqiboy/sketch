@@ -60,7 +60,7 @@
                     });
                 },
                 end:function(){
-                    if(this.actions[this.steps-1].pens.length<=2){
+                    if(this.actions[this.steps-1].pens.length<2){
                         this.actions.splice(-1);
                     }
                 }
