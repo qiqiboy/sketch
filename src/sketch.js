@@ -163,7 +163,7 @@
                 for(i=0,len=buffer.length;i<len;i++){
                     buffer[i]=bytestr.charCodeAt(i);
                 }
-                callback(new Blob([buffer.buffer],{type:type||dataUrl[0].replace(/^data:|;base64$/gi,'')}));
+                callback(new Blob([buffer.buffer],{type:type||dataUrl[0].split(/[:;]/)[1]}));
             }).apply(this.canvas,arguments);
         }
     }
