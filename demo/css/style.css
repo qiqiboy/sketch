@@ -148,6 +148,8 @@ a.button{
     top:50%;
     left:50%;
     -webkit-transform:translate(-50%,-50%);
+    -moz-transform:translate(-50%,-50%);
+    transform:translate(-50%,-50%);
     background:#fff;
     color:#333;
     max-height:90%;
@@ -178,9 +180,13 @@ a.button{
 }
 .Panel .close:before{
     -webkit-transform:rotate(45deg);
+    -moz-transform:rotate(45deg);
+    transform:rotate(45deg);
 }
 .Panel .close:after{
     -webkit-transform:rotate(-45deg);
+    -moz-transform:rotate(-45deg);
+    transform:rotate(-45deg);
 }
 
 #wrap{
