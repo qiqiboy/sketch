@@ -64,7 +64,7 @@
             imgurl=sketch.toDataUrl();
         panel.setContent('<a class="close"></a><h3>长按保存</h3><img src="'+imgurl+'" />').frame.addClass('pic-pad');
         panel.frame.find('.close').tap(function(){
-            panel.hide();
+            panel.destroy();
         });
         panel.show();
     });
