@@ -6,7 +6,8 @@
 (function($,undefined){
     var sketch=new Sketch('sketch',{
         lineWidth:5,
-        color:'black'
+        color:'black',
+        bgcolor:'#fff'
     }),
     tools=$('#pad-tools');
 

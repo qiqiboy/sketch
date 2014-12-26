@@ -17,7 +17,8 @@ Just a HTML5 sketch-pad.
 
 var sketch=new Sketch('canvas',{
     width:document.body.clientWidth,
-    height:document.body.clientHeight,
+    height:document.body.clientHeight,,
+	bgcolor:'transparent'
     lineWidth:5,
     color:'red'
 });

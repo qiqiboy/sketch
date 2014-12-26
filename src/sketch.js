@@ -26,13 +26,14 @@
         lineWidth:5,
         color:'#000',
         erase:false,
+        bgcolor:'transparent',
         init:function(config){
             this.events={};
             this.actions=[];
 
             this.ctx=this.canvas.getContext('2d');
 
-            typeof config=='object' && "width height lineWidth color".split(" ").forEach(function(prop){
+            typeof config=='object' && "width height lineWidth color bgcolor".split(" ").forEach(function(prop){
                 this[prop]=typeof config[prop]=='undefined'?this[prop]:config[prop];
             }.bind(this));
 
@@ -62,6 +63,14 @@
                 end:function(){
                     if(this.actions[this.steps-1].pens.length<2){
                         this.actions.pop();
+                    }
+                },
+                redraw:function(){
+                    var ctx=this.ctx;
+                    if(this.bgcolor!='transparent'){
+                        ctx.fillStyle=this.bgcolor;
+                        ctx.globalCompositeOperation='destination-over';
+                        ctx.fillRect(0,0,this.width,this.height);
                     }
                 }
             });
@@ -151,6 +160,7 @@
         },
         reDraw:function(){
             this.ctx.clearRect(0,0,this.width,this.height);
+            this.fire('redraw');
             this.actions.forEach(this.draw.bind(this));
             return this;
         },
