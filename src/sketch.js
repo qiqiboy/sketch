@@ -69,7 +69,6 @@
                     var ctx=this.ctx;
                     if(this.bgcolor!='transparent'){
                         ctx.fillStyle=this.bgcolor;
-                        ctx.globalCompositeOperation='destination-over';
                         ctx.fillRect(0,0,this.width,this.height);
                     }
                 }
