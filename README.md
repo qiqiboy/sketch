@@ -14,6 +14,7 @@ Just a HTML5 sketch-pad.
 //                      .height int 画板高度
 //                      .lineWidth int 笔画宽度
 //                      .color 笔画颜色
+//                      .bgcolor 背景颜色
 
 var sketch=new Sketch('canvas',{
     width:document.body.clientWidth,
