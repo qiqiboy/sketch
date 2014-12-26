@@ -54,4 +54,4 @@ sketch.erase=true; //该属性为true时表示是擦除状态
 ````
 
 ## DEMO 
-http://u.boy.im/sketch
+http://u.boy.im/sketch/demo

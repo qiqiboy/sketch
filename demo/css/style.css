@@ -1,0 +1,300 @@
+﻿@charset "utf-8";
+ 
+/* reset css */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/* to preserve line-height and selector appearance */
+sup {
+	vertical-align:text-top;
+}
+sub {
+	vertical-align:text-bottom;
+}
+input,
+button,
+textarea,
+select {
+	font-family:inherit;
+	font-size:inherit;
+	font-weight:inherit;
+	width:auto;
+	overflow:visible;
+}
+/*because legend doesn't inherit in IE */
+legend {
+	color:#000;
+}
+h1,h2,h3,h4,h5,h6{
+	font-weight:normal;
+}
+/* end reset css */
+html,
+body {
+	height:100%;
+}
+a,a:active{
+	color:#fff;
+	text-decoration:none;
+	outline:none;
+}
+/*float clear*/
+.clear:after {
+	content: "\200c";
+	display :block;
+	height: 0;
+	font-size: 0;
+	clear: both;
+}
+.none{
+	display:none;
+	overflow:hidden;
+}
+
+a,button,
+input[type=submit],
+input[type=button]{
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+}
+
+body {
+	background:#b72c2c;
+	color:#fff;
+	font-family:"Microsoft YaHei", Arial, Verdana, serif;
+	font-size:14px;
+	line-height:1.4;
+    -webkit-user-select:none; /* 禁止选择 */
+    -webkit-touch-callout:none; /* 禁用弹出 */
+}
+.wrapper{
+	width:100%;
+	display:block;
+	min-width:320px;
+}
+.main{
+	margin:0 auto;
+}
+.button{
+    margin:0;
+    padding:0;
+    outline:none;
+    border:1px solid #fff;
+    border-radius:5px;
+    height:30px;
+    text-align:center;
+    color:#fff;
+    background:#b72c2c;
+}
+.button:active{
+    opacity:.7;
+}
+a.button{
+    display:inline-block;
+    height:28px;
+    line-height:28px;
+}
+
+.Mask{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background:rgba(0,0,0,.5);
+}
+.Panel{
+    position:fixed;
+    top:50%;
+    left:50%;
+    -webkit-transform:translate(-50%,-50%);
+    background:#fff;
+    color:#333;
+    max-height:90%;
+    box-shadow:1px 1px 3px rgba(0,0,0,.5);
+    padding:30px;
+    width:200px;
+    overflow:auto;
+    display:none;
+}
+.Panel .close{
+    position:absolute;
+    right:5px;
+    top:5px;
+    width:20px;
+    height:20px;
+    z-index:1;
+}
+.Panel .close:before,
+.Panel .close:after{
+    content:'';
+    display:block;
+    width:2px;
+    height:20px;
+    background:#c8243b;
+    position:absolute;
+    top;0;
+    left:9px;
+}
+.Panel .close:before{
+    -webkit-transform:rotate(45deg);
+}
+.Panel .close:after{
+    -webkit-transform:rotate(-45deg);
+}
+
+#wrap{
+    min-height:100%;
+    position:relative;
+}
+#pad{
+    position:absolute;
+    top:60px;
+    bottom:100px;
+    left:15px;
+    right:15px;
+}
+#sketch{
+    display:block;
+    width:100%;
+    height:100%;
+    background:#fff;
+    border-radius:20px;
+}
+.pad-h{
+    padding:15px;
+    line-height:30px;
+}
+.pad-h .button{
+    width:80px;
+    float:right;
+}
+#pad-tools{
+    position:absolute;
+    left:50%;
+    bottom:5px;
+    width:262px;
+    margin-left:-131px;
+}
+#pad-tools .button{
+    margin-bottom:10px;
+    float:left;
+}
+.pen-w{
+    width:106px;
+}
+.pen-w i{
+    border-radius:100%;
+    display:inline-block;
+    margin-left:5px;
+    border:1px solid #fff;
+    border-radius:100%;
+    vertical-align:middle;
+}
+.pen-w i.active{
+    background:#fff;
+}
+.pen-w i:nth-child(1){
+    width:3px;
+    height:3px;
+}
+.pen-w i:nth-child(2){
+    width:5px;
+    height:5px;
+}
+.pen-w i:nth-child(3){
+    width:10px;
+    height:10px;
+}
+.pen-c{
+    border:0;
+    border-radius:0;
+    height:30px;
+    width:23px;
+    background:url(../images/pen.jpg) no-repeat center 1px;
+    background-size:23px 23px;
+    border-bottom:3px solid #000;
+    margin:0 20px;
+}
+.pen-cancel{
+    width:90px;
+}
+.pen-clear{
+    width:80px;
+    margin:0 10px;
+}
+.pen-erase{
+    width:80px;
+}
+.pen-erase.active{
+    background:#fff;
+    color:#333;
+}
+.pen-show{
+    width:80px;
+}
+.color-pad li{
+    width:30px;
+    height:30px;
+    float:left;
+    margin:5px;
+}
+.pic-pad{
+    padding:0;
+    width:90%;
+}
+.pic-pad img{
+    display:block;
+    margin:0 auto;
+    max-width:100%;
+    -webkit-touch-callout:default;
+}
+.pic-pad h3{
+    text-align:center;
+    position:absolute;
+    top:0;
+    width:100%;
+    padding:10px 0;
+}
+
+
