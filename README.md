@@ -43,8 +43,13 @@ sketch.cancel(num); //上一步，num为取消步数，默认为1
 sketch.toDataUrl(type); //转为dataUrl数据
 sketch.toBlob(callback,type); //生成blob对象（不支持ie9-）
 
+// 更改笔画宽度、颜色
+sketch.lineWidth=10;
+sketch.color='green';
+
 // erase擦除
 sketch.erase=true; //该属性为true时表示是擦除状态
+
 
 ````
 
