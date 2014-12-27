@@ -63,8 +63,8 @@
     tools.find('.pen-show').tap(function(){
         var panel=new K.Panel,
             imgurl=sketch.toDataUrl();
-        panel.setContent('<a class="close"></a><h3>长按保存</h3><img src="'+imgurl+'" />').frame.addClass('pic-pad');
-        panel.frame.find('.close').tap(function(){
+        panel.setContent('<a class="close"></a><h3>长按保存</h3><div class="pic"><img src="'+imgurl+'" /></div>').frame.addClass('pic-pad');
+        panel.frame.on('touchmove',function(e){e.stopPropagation();}).find('.close').tap(function(){
             panel.destroy();
         });
         panel.show();

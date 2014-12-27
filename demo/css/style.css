@@ -156,7 +156,6 @@ a.button{
     box-shadow:1px 1px 3px rgba(0,0,0,.5);
     padding:30px;
     width:200px;
-    overflow:auto;
     display:none;
 }
 .Panel .close{
@@ -288,6 +287,20 @@ a.button{
 .pic-pad{
     padding:0;
     width:90%;
+    height:90%;
+}
+.pic-pad .pic{
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
+    overflow-scrolling:touch;
+    position:absolute;
+    top:30px;
+    left:0;
+    right:0;
+    bottom:0;
+    display:-webkit-box;
+    -webkit-box-pack:center;
+    -webkit-box-align:center;
 }
 .pic-pad img{
     display:block;
