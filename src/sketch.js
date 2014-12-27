@@ -72,7 +72,7 @@
                         ctx.fillRect(0,0,this.width,this.height);
                     }
                 }
-            });
+            }).clear();
         },
         handleEvent:function(ev){
             var x=ev.clientX||0,
@@ -120,14 +120,15 @@
         },
         on:function(ev,callback){
             if(typeof ev == 'object'){
-                return Object.keys(ev).forEach(function(_e){
+                Object.keys(ev).forEach(function(_e){
                     this.on(_e,ev[_e]);
                 }.bind(this));
+            }else{
+                if(!this.events[ev]){
+                    this.events[ev]=[];
+                }
+                this.events[ev].push(callback);
             }
-            if(!this.events[ev]){
-                this.events[ev]=[];
-            }
-            this.events[ev].push(callback);
             return this;
         },
         fire:function(ev){
