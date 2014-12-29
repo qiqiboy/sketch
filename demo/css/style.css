@@ -301,6 +301,12 @@ a.button{
     display:-webkit-box;
     -webkit-box-pack:center;
     -webkit-box-align:center;
+    display:-moz-box;
+    -moz-box-pack:center;
+    -moz-box-align:center;
+    display:box;
+    box-pack:center;
+    box-align:center;
 }
 .pic-pad img{
     display:block;
