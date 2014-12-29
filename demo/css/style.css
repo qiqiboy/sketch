@@ -290,11 +290,8 @@ a.button{
     height:90%;
 }
 .pic-pad .pic{
-    overflow:auto;
-    -webkit-overflow-scrolling:touch;
-    overflow-scrolling:touch;
     position:absolute;
-    top:30px;
+    top:0;
     left:0;
     right:0;
     bottom:0;
@@ -307,12 +304,14 @@ a.button{
     display:box;
     box-pack:center;
     box-align:center;
+    height:100%;
+    padding-top:30px;
+    box-sizing:border-box;
 }
 .pic-pad img{
     display:block;
-    margin:0 auto;
     max-width:100%;
-    -webkit-touch-callout:default;
+    max-height:100%;
 }
 .pic-pad h3{
     text-align:center;
