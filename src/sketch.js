@@ -100,7 +100,7 @@
                 touchNum=ev.touches.length;
             }
 
-            (!this.multi||evts.length==1) && evts.forEach(function(_ev){
+            (this.multi||evts.length==1) && evts.forEach(function(_ev){
                 var identifier=_ev.identifier||0;
 
                 x=(_ev.clientX-rect.left)*ratioX;
