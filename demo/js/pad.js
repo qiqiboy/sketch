@@ -7,7 +7,8 @@
     var sketch=new Sketch('sketch',{
         lineWidth:5,
         color:'black',
-        bgcolor:'#fff'
+        bgcolor:'#fff',
+        multi:true
     }),
     tools=$('#pad-tools');
 

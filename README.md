@@ -15,13 +15,15 @@ Just a HTML5 sketch-pad.
 //                      .lineWidth int 笔画宽度
 //                      .color 笔画颜色
 //                      .bgcolor 背景颜色
+//                      .multi 是否支持多指同时绘画
 
 var sketch=new Sketch('canvas',{
     width:document.body.clientWidth,
     height:document.body.clientHeight,,
 	bgcolor:'transparent'
     lineWidth:5,
-    color:'red'
+    color:'red',
+    multi:false
 });
 
 // @event 
