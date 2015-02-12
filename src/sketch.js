@@ -19,7 +19,8 @@
             "pointerdown pointermove pointerup pointercancel" :
             "createTouch" in ROOT.document || 'ontouchstart' in ROOT ?
             "touchstart touchmove touchend touchcancel" :
-            "mousedown mousemove mouseup";
+            "mousedown mousemove mouseup",
+        slice=[].slice;
     
     struct.prototype={
         constructor:struct,
@@ -33,25 +34,30 @@
 
             this.ctx=this.canvas.getContext('2d');
 
-            typeof config=='object' && "width height lineWidth color bgcolor".split(" ").forEach(function(prop){
+            typeof config=='object' && "width height lineWidth color bgcolor multi".split(" ").forEach(function(prop){
                 this[prop]=typeof config[prop]=='undefined'?this[prop]:config[prop];
             }.bind(this));
 
             evstr.split(" ").forEach(function(ev){
                 this.canvas.addEventListener(ev, this, false);
             }.bind(this));
+
+            var tempPens
             
             this.on({
                 start:function(){
-                   this.actions.push({
-                       width:this.lineWidth,
-                       color:this.color,
-                       erase:this.erase,
-                       pens:[arguments]
-                   });
+                    if(!this.moving){
+                        tempPens=[];
+                    }
+                    tempPens[arguments[2]]={
+                        width:this.lineWidth,
+                        color:this.color,
+                        erase:this.erase,
+                        pens:[arguments]
+                    }
                 },
                 move:function(){
-                    var action=this.actions[this.steps-1];
+                    var action=tempPens[arguments[2]];
                     action.pens.push(arguments);
                     this.draw({
                         width:action.width,
@@ -61,8 +67,9 @@
                     });
                 },
                 end:function(){
-                    if(this.actions[this.steps-1].pens.length<2){
-                        this.actions.pop();
+                    var id=arguments[2];
+                    if(tempPens[id].pens.length>1){
+                        this.actions.push(tempPens[id]);
                     }
                 },
                 redraw:function(){
@@ -75,48 +82,59 @@
             }).clear();
         },
         handleEvent:function(ev){
-            var x=ev.clientX||0,
-                y=ev.clientY||0,
-                rect=this.canvas.getBoundingClientRect();
-            if(ev.touches && ev.touches.length){
-                if(ev.touches.length>1){//多指触摸不作响应
-                    return;
+            var rect=this.canvas.getBoundingClientRect(),
+                ratioX=this.width/rect.width,
+                ratioY=this.height/rect.height,
+                evts=[ev],
+                touchNum=0,
+                x,y;
+
+            if(ev.changedTouches){
+                evts=slice.call(ev.changedTouches).map(function(touch){
+                    return {
+                        clientX:touch.clientX,
+                        clientY:touch.clientY,
+                        identifier:touch.identifier
+                    }
+                });
+                touchNum=ev.touches.length;
+            }
+
+            (!this.multi||evts.length==1) && evts.forEach(function(_ev){
+                var identifier=_ev.identifier||0;
+
+                x=(_ev.clientX-rect.left)*ratioX;
+                y=(_ev.clientY-rect.top)*ratioY;
+                
+                switch(ev.type.toLowerCase()){
+                    case 'mousedown':
+                    case 'touchstart':
+                    case 'pointerdown':
+                        this.fire('start',x,y,identifier);
+                        this.moving=true;
+                        break;
+                    case 'mousemove':
+                    case 'touchmove':
+                    case 'pointermove':
+                        if(this.moving){
+                            ev.preventDefault();
+                            this.fire('move',x,y,identifier);
+                        }
+                        break;
+                    case 'mouseup':
+                    case 'touchend':
+                    case 'touchcancel':
+                    case 'pointerup':
+                    case 'pointercancel':
+                        if(this.moving){
+                            this.fire('end',x,y,identifier);
+                            if(!touchNum){
+                                delete this.moving;
+                            }
+                        }
+                        break;
                 }
-                x=ev.touches.item(0).clientX;
-                y=ev.touches.item(0).clientY;
-            }
-            x-=rect.left;
-            y-=rect.top;
-
-            x*=this.width/rect.width;
-            y*=this.height/rect.height;
-
-            switch(ev.type.toLowerCase()){
-                case 'mousedown':
-                case 'touchstart':
-                case 'pointerdown':
-                    this.moving=true;
-                    this.fire('start',x,y);
-                    break;
-                case 'mousemove':
-                case 'touchmove':
-                case 'pointermove':
-                    if(this.moving){
-                        ev.preventDefault();
-                        this.fire('move',x,y);
-                    }
-                    break;
-                case 'mouseup':
-                case 'touchend':
-                case 'touchcancel':
-                case 'pointerup':
-                case 'pointercancel':
-                    if(this.moving){
-                        delete this.moving;
-                        this.fire('end');
-                    }
-                    break;
-            }
+            }.bind(this));
         },
         on:function(ev,callback){
             if(typeof ev == 'object'){
