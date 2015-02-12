@@ -128,7 +128,7 @@
                     case 'pointercancel':
                         if(this.moving){
                             this.fire('end',x,y,identifier);
-                            if(!touchNum){
+                            if(!touchNum||!this.multi){
                                 delete this.moving;
                             }
                         }
