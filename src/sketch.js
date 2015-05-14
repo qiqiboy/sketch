@@ -235,9 +235,9 @@
 
     ROOT.Sketch=struct;
     
-})(window, function(id,config){
-    if(!(this instanceof arguments.callee)){
-        return new arguments.callee(id,config);
+})(window, function self(id,config){
+    if(!(this instanceof self)){
+        return new self(id,config);
     }
 
     this.canvas=typeof id=='string'?document.getElementById(id):id;
