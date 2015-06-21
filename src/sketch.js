@@ -54,7 +54,6 @@
         }
 
         pointers=POINTERS[ev.eventType];
-        ev.changedPointers=[];
         switch(ev.eventType){
             case 'mouse':
             case 'pointer':
@@ -63,32 +62,10 @@
                 ev.changedPointers=[{id:id,ev:oldEvent}];
                 break;
             case 'touch':
-                var _pointers={};
-                slice.call(oldEvent.touches).forEach(function(pointer){
-                    _pointers[pointer.identifier]=pointer;
+                ev.changedPointers=slice.call(oldEvent.changedTouches).map(function(pointer){
+                    return {id:pointer.identifier,ev:pointer};
                 });
-                switch(ev.eventCode){
-                    case 1:
-                        for(var id in _pointers){
-                            if(!pointers[id]){
-                                ev.changedPointers.push({id:id,ev:_pointers[id]});
-                            }
-                        }
-                        break;
-                    case 3:
-                        for(var id in pointers){
-                            if(!_pointers[id]){
-                                ev.changedPointers.push({id:id,ev:pointers[id]});
-                            }
-                        }
-                        break;
-                    case 2:
-                        ev.changedPointers=slice.call(oldEvent.touches).map(function(pointer){
-                            return {id:pointer.identifier,ev:pointer};
-                        });
-                        break;
-                }
-                POINTERS[ev.eventType]=pointers=_pointers;
+                POINTERS[ev.eventType]=pointers=slice.call(oldEvent.touches);
                 break;
         }
 
