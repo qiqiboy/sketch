@@ -95,8 +95,6 @@
                 this[prop]=typeof config[prop]=='undefined'?this[prop]:config[prop];
             }.bind(this));
 
-            this.ctx.scale(dpr,dpr);//retina support
-
             evs.forEach(function(ev){
                 this.canvas.addEventListener(ev, this, false);
             }.bind(this));
@@ -257,6 +255,7 @@
                 },
                 set:function(value){
                     this.canvas[prop]=value*dpr;
+                    this.ctx.scale(dpr,dpr);//retina support
                 },
                 enumerable:true
             });
