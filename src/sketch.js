@@ -6,21 +6,101 @@
 (function(ROOT, struct, undefined){
     "use strict";
 
-    if(typeof Function.prototype.bind!='function'){
-        Function.prototype.bind=function(obj){
-            var self=this;
-            return function(){
-                return self.apply(obj,arguments);
-            }
-        }
+    var states={
+            start:1,
+            down:1,
+            move:2,
+            end:3,
+            up:3,
+            cancel:3
+        },
+        evs=[],
+        slice=[].slice,
+        event2type={},
+        event2code={},
+        POINTERS={},
+        dpr=ROOT.devicePixelRatio||1;
+
+    typeof [].forEach=='function' && "mouse touch pointer MSPointer-".split(" ").forEach(function(prefix){
+        var _prefix=/pointer/i.test(prefix)?'pointer':prefix;
+        Object.keys(states).forEach(function(endfix){
+            var code=states[endfix],
+                ev=camelCase(prefix+endfix);
+            evs.push(ev);
+            POINTERS[_prefix]={};
+            event2type[ev.toLowerCase()]=_prefix;
+            event2code[ev.toLowerCase()]=code;
+        });
+    });
+
+    function camelCase(str){
+        return (str+'').replace(/-([a-z]|[0-9])/ig, function(all,letter){
+            return (letter+'').toUpperCase();
+        });
     }
 
-    var evstr='PointerEvent' in ROOT ?
-            "pointerdown pointermove pointerup pointercancel" :
-            "createTouch" in ROOT.document || 'ontouchstart' in ROOT ?
-            "touchstart touchmove touchend touchcancel" :
-            "mousedown mousemove mouseup",
-        slice=[].slice;
+    function filterEvent(oldEvent){
+         var ev={},
+             eventtype,
+             pointers,
+             pointer;
+
+        ev.oldEvent=oldEvent;
+        ev.type=oldEvent.type.toLowerCase();
+        ev.eventType=event2type[ev.type]||ev.type;
+        ev.eventCode=event2code[ev.type]||0;
+        ev.preventDefault=function(){
+            oldEvent.preventDefault();
+        }
+
+        pointers=POINTERS[ev.eventType];
+        ev.changedPointers=[];
+        switch(ev.eventType){
+            case 'mouse':
+            case 'pointer':
+                var id=oldEvent.pointerId||0;
+                ev.eventCode==3?delete pointers[id]:pointers[id]=oldEvent;
+                ev.changedPointers=[{id:id,ev:oldEvent}];
+                break;
+            case 'touch':
+                var _pointers={};
+                slice.call(oldEvent.touches).forEach(function(pointer){
+                    _pointers[pointer.identifier]=pointer;
+                });
+                switch(ev.eventCode){
+                    case 1:
+                        for(var id in _pointers){
+                            if(!pointers[id]){
+                                ev.changedPointers.push({id:id,ev:_pointers[id]});
+                            }
+                        }
+                        break;
+                    case 3:
+                        for(var id in pointers){
+                            if(!_pointers[id]){
+                                ev.changedPointers.push({id:id,ev:pointers[id]});
+                            }
+                        }
+                        break;
+                    case 2:
+                        ev.changedPointers=slice.call(oldEvent.touches).map(function(pointer){
+                            return {id:pointer.identifier,ev:pointer};
+                        });
+                        break;
+                }
+                POINTERS[ev.eventType]=pointers=_pointers;
+                break;
+        }
+
+        if(pointer=pointers[Object.keys(pointers)[0]]){
+            ev.clientX=pointer.clientX;
+            ev.clientY=pointer.clientY;
+        }
+
+        ev.length=Object.keys(pointers).length;
+
+        return ev;
+    }
     
     struct.prototype={
         constructor:struct,
@@ -38,7 +118,9 @@
                 this[prop]=typeof config[prop]=='undefined'?this[prop]:config[prop];
             }.bind(this));
 
-            evstr.split(" ").forEach(function(ev){
+            this.ctx.scale(dpr,dpr);//retina support
+
+            evs.forEach(function(ev){
                 this.canvas.addEventListener(ev, this, false);
             }.bind(this));
 
@@ -81,60 +163,39 @@
                 }
             }).clear();
         },
-        handleEvent:function(ev){
-            var rect=this.canvas.getBoundingClientRect(),
-                ratioX=this.width/rect.width,
-                ratioY=this.height/rect.height,
-                evts=[ev],
-                touchNum=0,
-                x,y;
+        handleEvent:function(oldEvent){
+            var ev=filterEvent(oldEvent),
+                rect=this.canvas.getBoundingClientRect();
 
-            if(ev.changedTouches){
-                evts=slice.call(ev.changedTouches).map(function(touch){
-                    return {
-                        clientX:touch.clientX,
-                        clientY:touch.clientY,
-                        identifier:touch.identifier
-                    }
-                });
-                touchNum=ev.touches.length;
-            }
-
-            (this.multi||evts.length==1) && evts.forEach(function(_ev){
-                var identifier=_ev.identifier||0;
-
-                x=(_ev.clientX-rect.left)*ratioX;
-                y=(_ev.clientY-rect.top)*ratioY;
-                
-                switch(ev.type.toLowerCase()){
-                    case 'mousedown':
-                    case 'touchstart':
-                    case 'pointerdown':
-                        this.fire('start',x,y,identifier);
+            (this.multi||ev.length<=1) && ev.changedPointers.forEach(function(pointer){
+                var x=pointer.ev.clientX-rect.left,
+                    y=pointer.ev.clientY-rect.top;
+                switch(ev.eventCode){
+                    case 1:
+                        if(!this.pointerType){
+                            this.pointerType=ev.eventType;
+                        }
+                        this.fire('start',x,y,pointer.id);
                         this.moving=true;
                         break;
-                    case 'mousemove':
-                    case 'touchmove':
-                    case 'pointermove':
-                        if(this.moving){
+                    case 2:
+                        if(this.moving&&this.pointerType==event2type[ev.type]){
                             ev.preventDefault();
-                            this.fire('move',x,y,identifier);
+                            this.fire('move',x,y,pointer.id);
                         }
                         break;
-                    case 'mouseup':
-                    case 'touchend':
-                    case 'touchcancel':
-                    case 'pointerup':
-                    case 'pointercancel':
-                        if(this.moving){
-                            this.fire('end',x,y,identifier);
-                            if(!touchNum||!this.multi){
-                                delete this.moving;
-                            }
+                    case 3:
+                        if(this.moving&&this.pointerType==event2type[ev.type]){
+                            this.fire('end',x,y,pointer.id);
                         }
                         break;
                 }
             }.bind(this));
+
+            if(this.moving&&!ev.length){
+                delete this.moving;
+                delete this.pointerType;
+            }
         },
         on:function(ev,callback){
             if(typeof ev == 'object'){
@@ -215,10 +276,10 @@
         "width height".split(" ").forEach(function(prop){
             Object.defineProperty(struct.prototype,prop,{
                 get:function(){
-                    return this.canvas[prop];
+                    return this.canvas[prop]/dpr;
                 },
                 set:function(value){
-                    this.canvas[prop]=value;
+                    this.canvas[prop]=value*dpr;
                 },
                 enumerable:true
             });
