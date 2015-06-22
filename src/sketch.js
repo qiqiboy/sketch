@@ -195,21 +195,19 @@
             return this;
         },
         draw:function(action){
-            var ctx=this.ctx;
+            var ctx=this.ctx,
+                isTransparent=!this.bgcolor||this.bgcolor=='transparent';
             ctx.lineWidth=action.width;
             ctx.lineJoin=ctx.lineCap='round';
-            if(action.erase){
-                ctx.strokeStyle="#000";
-                ctx.globalCompositeOperation='destination-out';
-            }else{
-                ctx.globalCompositeOperation='source-over';
-                ctx.strokeStyle=action.color;
-            }
+            ctx.strokeStyle=action.erase?isTransparent?"#000":this.bgcolor:action.color;
+            ctx.globalCompositeOperation=action.erase&&isTransparent?'destination-out':'source-over';
+
             ctx.beginPath();
             action.pens.forEach(function(pos,step){
                 ctx[step?'lineTo':'moveTo'].apply(ctx,pos);
             });
             ctx.stroke();
+
             return this;
         },
         reDraw:function(){
