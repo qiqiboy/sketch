@@ -62,10 +62,13 @@
                 ev.changedPointers=[{id:id,ev:oldEvent}];
                 break;
             case 'touch':
+                POINTERS[ev.eventType]=pointers={};
                 ev.changedPointers=slice.call(oldEvent.changedTouches).map(function(pointer){
                     return {id:pointer.identifier,ev:pointer};
                 });
-                POINTERS[ev.eventType]=pointers=slice.call(oldEvent.touches);
+                slice.call(oldEvent.touches).forEach(function(pointer){
+                    pointers[pointer.identifier]=pointer;
+                });
                 break;
         }
 
@@ -99,7 +102,7 @@
                 this.canvas.addEventListener(ev, this, false);
             }.bind(this));
 
-            var tempPens
+            var tempPens;
             
             this.on({
                 start:function(){
@@ -140,36 +143,55 @@
         },
         handleEvent:function(oldEvent){
             var ev=filterEvent(oldEvent),
-                rect=this.canvas.getBoundingClientRect();
+                rect=this.canvas.getBoundingClientRect(),
+                isRight=!this.pointerType||this.pointerType==ev.eventType;
 
-            (this.multi||ev.length<=1) && ev.changedPointers.forEach(function(pointer){
-                var x=pointer.ev.clientX-rect.left,
-                    y=pointer.ev.clientY-rect.top;
-                switch(ev.eventCode){
-                    case 1:
-                        if(!this.pointerType){
-                            this.pointerType=ev.eventType;
+            switch(ev.eventCode){
+                case 1:
+                    if(!this.pointerType){
+                        this.pointerType=ev.eventType;
+                    }
+                    if(isRight){
+                        if(this.multi||ev.length<2){
+                            ev.changedPointers.forEach(function(pointer){
+                                this.firstPointer=pointer;
+                                this.fire('start',pointer.ev.clientX-rect.left,pointer.ev.clientY-rect.top,pointer.id);
+                            }.bind(this));
+                            this.moving=true;
+                        }else{
+                            this.firstPointer && this.fire('end',0,0,this.firstPointer.id);
+                            this.firstPointer=null;
                         }
-                        this.fire('start',x,y,pointer.id);
-                        this.moving=true;
-                        break;
-                    case 2:
-                        if(this.moving&&this.pointerType==event2type[ev.type]){
+                    }
+                    break;
+                case 2:
+                    if(this.moving&&isRight){
+                        if(this.multi||ev.length<2){
                             ev.preventDefault();
-                            this.fire('move',x,y,pointer.id);
+                            ev.changedPointers.forEach(function(pointer){
+                                this.fire('move',pointer.ev.clientX-rect.left,pointer.ev.clientY-rect.top,pointer.id);
+                            }.bind(this));
                         }
-                        break;
-                    case 3:
-                        if(this.moving&&this.pointerType==event2type[ev.type]){
-                            this.fire('end',x,y,pointer.id);
+                    }
+                    break;
+                case 3:
+                    if(this.moving&&isRight){
+                        if(this.multi){
+                            ev.changedPointers.forEach(function(pointer){
+                                this.fire('end',pointer.ev.clientX-rect.left,pointer.ev.clientY-rect.top,pointer.id);
+                            }.bind(this));
+                        }else if(ev.length==1){
+                            this.firstPointer={id:Object.keys(POINTERS[ev.eventType])[0]};
+                            this.fire('start',ev.clientX-rect.left,ev.clientY-rect.top,this.firstPointer.id);
+                        }else if(!ev.length){
+                            this.fire('end',0,0,this.firstPointer.id);
                         }
-                        break;
-                }
-            }.bind(this));
-
-            if(this.moving&&!ev.length){
-                delete this.moving;
-                delete this.pointerType;
+                        if(!ev.length){
+                            delete this.moving;
+                            delete this.pointerType;
+                        }
+                    }
+                    break;
             }
         },
         on:function(ev,callback){
