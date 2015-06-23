@@ -59,25 +59,28 @@
             case 'pointer':
                 var id=oldEvent.pointerId||0;
                 ev.eventCode==3?delete pointers[id]:pointers[id]=oldEvent;
-                ev.changedPointers=[{id:id,ev:oldEvent}];
+                ev.changedPointers=[{id:id,clientX:oldEvent.clientX,clientY:oldEvent.clientY}];
+                ev.pointers=Object.keys(pointers).map(function(id){
+                    return {id:id,clientX:pointers[id].clientX,clientY:pointers[id].clientY};
+                });
                 break;
             case 'touch':
                 POINTERS[ev.eventType]=pointers={};
                 ev.changedPointers=slice.call(oldEvent.changedTouches).map(function(pointer){
-                    return {id:pointer.identifier,ev:pointer};
+                    return {id:pointer.identifier,clientX:pointer.clientX,clientY:pointer.clientY};
                 });
-                slice.call(oldEvent.touches).forEach(function(pointer){
-                    pointers[pointer.identifier]=pointer;
+                ev.pointers=slice.call(POINTERS[ev.eventType]=pointers=oldEvent.touches).map(function(pointer){
+                    return {id:pointer.identifier,clientX:pointer.clientX,clientY:pointer.clientY};
                 });
                 break;
         }
 
-        if(pointer=pointers[Object.keys(pointers)[0]]){
+        if(pointer=ev.pointers[0]){
             ev.clientX=pointer.clientX;
             ev.clientY=pointer.clientY;
         }
 
-        ev.length=Object.keys(pointers).length;
+        ev.length=ev.pointers.length;
 
         return ev;
     }
@@ -102,7 +105,7 @@
                 this.canvas.addEventListener(ev, this, false);
             }.bind(this));
 
-            var tempPens;
+            var tempPens=[];
             
             this.on({
                 start:function(){
@@ -126,9 +129,8 @@
                         pens:action.pens.slice(-2)
                     });
                 },
-                end:function(){
-                    var id=arguments[2];
-                    if(tempPens[id].pens.length>1){
+                end:function(id){
+                    if(tempPens[id]&&tempPens[id].pens.length>1){
                         this.actions.push(tempPens[id]);
                     }
                 },
@@ -154,13 +156,13 @@
                     if(isRight){
                         if(this.multi||ev.length<2){
                             ev.changedPointers.forEach(function(pointer){
-                                this.firstPointer=pointer;
-                                this.fire('start',pointer.ev.clientX-rect.left,pointer.ev.clientY-rect.top,pointer.id);
-                            }.bind(this));
-                            this.moving=true;
+                                this.fire('start',pointer.clientX-rect.left,pointer.clientY-rect.top,pointer.id);
+                                this.moving=true;
+                            }.bind(this));  
                         }else{
-                            this.firstPointer && this.fire('end',0,0,this.firstPointer.id);
-                            this.firstPointer=null;
+                            ev.pointers.forEach(function(pointer){
+                                this.fire('end',pointer.id);
+                            }.bind(this));
                         }
                     }
                     break;
@@ -169,23 +171,23 @@
                         if(this.multi||ev.length<2){
                             ev.preventDefault();
                             ev.changedPointers.forEach(function(pointer){
-                                this.fire('move',pointer.ev.clientX-rect.left,pointer.ev.clientY-rect.top,pointer.id);
+                                this.fire('move',pointer.clientX-rect.left,pointer.clientY-rect.top,pointer.id);
                             }.bind(this));
                         }
                     }
                     break;
                 case 3:
                     if(this.moving&&isRight){
-                        if(this.multi){
+                        if(this.multi||!ev.length){
                             ev.changedPointers.forEach(function(pointer){
-                                this.fire('end',pointer.ev.clientX-rect.left,pointer.ev.clientY-rect.top,pointer.id);
+                                this.fire('end',pointer.id);
+                            }.bind(this));  
+                        }else{
+                            ev.pointers.forEach(function(pointer){
+                                this.fire('start',pointer.clientX-rect.left,pointer.clientY-rect.top,pointer.id);
                             }.bind(this));
-                        }else if(ev.length==1){
-                            this.firstPointer={id:Object.keys(POINTERS[ev.eventType])[0]};
-                            this.fire('start',ev.clientX-rect.left,ev.clientY-rect.top,this.firstPointer.id);
-                        }else if(!ev.length){
-                            this.fire('end',0,0,this.firstPointer.id);
                         }
+
                         if(!ev.length){
                             delete this.moving;
                             delete this.pointerType;
