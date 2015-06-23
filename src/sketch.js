@@ -40,10 +40,10 @@
     }
 
     function filterEvent(oldEvent){
-         var ev={},
-             eventtype,
-             pointers,
-             pointer;
+        var ev={},
+            eventtype,
+            pointers,
+            pointer;
 
         ev.oldEvent=oldEvent;
         ev.type=oldEvent.type.toLowerCase();
