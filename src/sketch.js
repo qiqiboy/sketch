@@ -109,9 +109,6 @@
             
             this.on({
                 start:function(){
-                    if(!this.moving){
-                        tempPens=[];
-                    }
                     tempPens[arguments[2]]={
                         width:this.lineWidth,
                         color:this.color,
@@ -155,13 +152,9 @@
                     }
                     if(isRight){
                         if(this.multi||ev.length<2){
+                            this.moving=true;
                             ev.changedPointers.forEach(function(pointer){
                                 this.fire('start',pointer.clientX-rect.left,pointer.clientY-rect.top,pointer.id);
-                                this.moving=true;
-                            }.bind(this));  
-                        }else{
-                            ev.pointers.forEach(function(pointer){
-                                this.fire('end',pointer.id);
                             }.bind(this));
                         }
                     }
@@ -181,11 +174,9 @@
                         if(this.multi||!ev.length){
                             ev.changedPointers.forEach(function(pointer){
                                 this.fire('end',pointer.id);
-                            }.bind(this));  
-                        }else{
-                            ev.pointers.forEach(function(pointer){
-                                this.fire('start',pointer.clientX-rect.left,pointer.clientY-rect.top,pointer.id);
                             }.bind(this));
+                        }else if(ev.length==1){
+                            this.fire('start',ev.clientX-rect.left,ev.clientY-rect.top,ev.pointers[0].id);
                         }
 
                         if(!ev.length){
