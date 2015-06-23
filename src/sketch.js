@@ -129,6 +129,7 @@
                 end:function(id){
                     if(tempPens[id]&&tempPens[id].pens.length>1){
                         this.actions.push(tempPens[id]);
+                        delete tempPens[id];
                     }
                 },
                 redraw:function(){
@@ -157,7 +158,7 @@
                                 this.fire('start',pointer.clientX-rect.left,pointer.clientY-rect.top,pointer.id);
                             }.bind(this));
                         }else{
-                            ev.pointers.forEach(function(pointer){
+                            ev.pointers.forEach(function(pointer){console.log(6)
                                 this.fire('end',pointer.id);
                             }.bind(this));
                         }
@@ -177,7 +178,7 @@
                     if(this.moving&&isRight){
                         if(this.multi||!ev.length){
                             ev.changedPointers.forEach(function(pointer){
-                                this.fire('end',pointer.id);
+                                this.fire('end',pointer.id);console.log(7)
                             }.bind(this));
                         }else if(ev.length==1){
                             this.fire('start',ev.clientX-rect.left,ev.clientY-rect.top,ev.pointers[0].id);
