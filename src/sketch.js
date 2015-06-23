@@ -156,6 +156,10 @@
                             ev.changedPointers.forEach(function(pointer){
                                 this.fire('start',pointer.clientX-rect.left,pointer.clientY-rect.top,pointer.id);
                             }.bind(this));
+                        }else{
+                            ev.pointers.forEach(function(pointer){
+                                this.fire('end',pointer.id);
+                            }.bind(this));
                         }
                     }
                     break;
