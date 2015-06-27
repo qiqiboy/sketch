@@ -149,10 +149,10 @@
             switch(ev.eventCode){
                 case 1:
                     if(!this.pointerType){
-                        clearTimeout(this.eventTimer);
                         this.pointerType=ev.eventType;
                     }
                     if(isRight){
+                        clearTimeout(this.eventTimer);
                         if(this.multi||ev.length<2){
                             this.moving=true;
                             ev.changedPointers.forEach(function(pointer){
@@ -179,7 +179,7 @@
                     if(this.moving&&isRight){
                         if(this.multi||!ev.length){
                             ev.changedPointers.forEach(function(pointer){
-                                this.fire('end',pointer.id);console.log(7)
+                                this.fire('end',pointer.id);
                             }.bind(this));
                         }else if(ev.length==1){
                             this.fire('start',ev.clientX-rect.left,ev.clientY-rect.top,ev.pointers[0].id);
