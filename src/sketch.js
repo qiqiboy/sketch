@@ -148,10 +148,10 @@
 
             switch(ev.eventCode){
                 case 1:
+                    clearTimeout(this.eventTimer);
                     if(!this.pointerType){
                         this.pointerType=ev.eventType;
                     }
-                    clearTimeout(this.eventTimer);
                     if(isRight){
                         if(this.multi||ev.length<2){
                             this.moving=true;
@@ -159,7 +159,7 @@
                                 this.fire('start',pointer.clientX-rect.left,pointer.clientY-rect.top,pointer.id);
                             }.bind(this));
                         }else{
-                            ev.pointers.forEach(function(pointer){console.log(6)
+                            ev.pointers.forEach(function(pointer){
                                 this.fire('end',pointer.id);
                             }.bind(this));
                         }
@@ -176,12 +176,13 @@
                     }
                     break;
                 case 3:
-                    if(this.moving&&isRight){
+                    if(isRight){
                         if(this.multi||!ev.length){
                             ev.changedPointers.forEach(function(pointer){
                                 this.fire('end',pointer.id);
                             }.bind(this));
                         }else if(ev.length==1){
+                            this.moving=true;
                             this.fire('start',ev.clientX-rect.left,ev.clientY-rect.top,ev.pointers[0].id);
                         }
                     }
