@@ -151,8 +151,8 @@
                     if(!this.pointerType){
                         this.pointerType=ev.eventType;
                     }
+                    clearTimeout(this.eventTimer);
                     if(isRight){
-                        clearTimeout(this.eventTimer);
                         if(this.multi||ev.length<2){
                             this.moving=true;
                             ev.changedPointers.forEach(function(pointer){
@@ -184,13 +184,13 @@
                         }else if(ev.length==1){
                             this.fire('start',ev.clientX-rect.left,ev.clientY-rect.top,ev.pointers[0].id);
                         }
+                    }
 
-                        if(!ev.length){
-                            delete this.moving;
-                            this.eventTimer=setTimeout(function(){
-                                delete this.pointerType;
-                            }.bind(this),30);
-                        }
+                    if(!ev.length){
+                        delete this.moving;
+                        this.eventTimer=setTimeout(function(){
+                            delete this.pointerType;
+                        }.bind(this),30);
                     }
                     break;
             }
