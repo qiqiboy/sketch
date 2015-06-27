@@ -149,6 +149,7 @@
             switch(ev.eventCode){
                 case 1:
                     if(!this.pointerType){
+                        clearTimeout(this.eventTimer);
                         this.pointerType=ev.eventType;
                     }
                     if(isRight){
@@ -186,7 +187,9 @@
 
                         if(!ev.length){
                             delete this.moving;
-                            delete this.pointerType;
+                            this.eventTimer=setTimeout(function(){
+                                delete this.pointerType;
+                            }.bind(this),30);
                         }
                     }
                     break;
