@@ -1,0 +1,19 @@
+{
+  "name": "sketch",
+  "version": "1.0.0",
+  "description": "Sketch",
+  "main": "src/sketch.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://qiqiboy@github.com/qiqiboy/sketch.git"
+  },
+  "author": "qiqiboy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/qiqiboy/sketch/issues"
+  },
+  "homepage": "https://github.com/qiqiboy/sketch#readme"
+}

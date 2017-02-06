@@ -292,14 +292,23 @@
 
     }
 
-    ROOT.Sketch=struct;
-    
+    if (typeof define === 'function' && define.amd) {
+        define(function(){
+            return struct;
+        });
+    } else if (typeof exports === 'object') {
+        module.exports = struct;
+    } else {
+        ROOT.Sketch=struct;
+    }
 })(window, function(id,config){
     if(!(this instanceof arguments.callee)){
         return new arguments.callee(id,config);
     }
 
     this.canvas=typeof id=='string'?document.getElementById(id):id;
+
+    this.canvas.style.touchAction = 'none';
 
     this.init(config);
 });
