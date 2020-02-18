@@ -1,7 +1,7 @@
 {
-  "name": "sketch",
+  "name": "sketch-lit",
   "version": "1.0.0",
-  "description": "Sketch",
+  "description": "Just a HTML5 sketch-pad.",
   "main": "src/sketch.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,5 +15,6 @@
   "bugs": {
     "url": "https://github.com/qiqiboy/sketch/issues"
   },
-  "homepage": "https://github.com/qiqiboy/sketch#readme"
+  "homepage": "https://github.com/qiqiboy/sketch#readme",
+  "types": "index.d.ts"
 }

@@ -1,3 +1,4 @@
+/* eslint-disable */
 /*
  * @author qiqiboy
  * @github https://github.com/qiqiboy/sketch
@@ -19,7 +20,18 @@
         event2type={},
         event2code={},
         POINTERS={},
-        dpr=ROOT.devicePixelRatio||1;
+        dpr=ROOT.devicePixelRatio||1,
+        // Test via a getter in the options object to see if the passive property is accessed
+        supportsPassive = false;
+
+    try {
+        var opts = Object.defineProperty({}, 'passive', {
+            get: function() {
+                supportsPassive = true;
+            }
+        });
+        window.addEventListener("testPassive", null, opts);
+    } catch (e) {}
 
     typeof [].forEach=='function' && "mouse touch pointer MSPointer-".split(" ").forEach(function(prefix){
         var _prefix=/pointer/i.test(prefix)?'pointer':prefix;
@@ -102,7 +114,9 @@
             }.bind(this));
 
             evs.forEach(function(ev){
-                this.canvas.addEventListener(ev, this, false);
+                this.canvas.addEventListener(ev, this, supportsPassive ? {
+                    passive: false
+                } : false);
             }.bind(this));
 
             var tempPens=[];
@@ -248,8 +262,11 @@
             this.actions.length=0;
             return this.reDraw();
         },
-        toDataUrl:function(type){
-            return this.canvas.toDataURL(type);
+        toDataUrl:function(type, quality){
+            return this.canvas.toDataURL(type, quality);
+        },
+        toDataURL:function(type, quality){
+            return this.canvas.toDataURL(type, quality);
         },
         toBlob:function(){
             return (this.canvas.toBlob||function(callback,type){

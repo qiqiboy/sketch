@@ -1,11 +1,21 @@
-Sketch
-=====
+# Sketch-Lit
 
-Just a HTML5 sketch-pad. 
-简易H5画板，支持绘画与擦除
+Just a HTML5 sketch-pad.
+简易 H5 画板，支持绘画与擦除
+
+## 安装
+
+```bash
+# Use npm
+$ npm install sketch-lit --save
+# Use Yarn
+$ yarn add sketch-lit
+```
 
 ## 如何使用
+
 ```javascript
+var SketchLit = require('sketch-lit');
 
 // @Class Sketch
 // @param String|HTMLCanvasElement id canvas节点id或者该对象
@@ -17,7 +27,7 @@ Just a HTML5 sketch-pad.
 //                      .bgcolor 背景颜色
 //                      .multi 是否支持多指同时绘画
 
-var sketch=new Sketch('canvas',{
+var sketch=new SketchLit('canvas',{
     width:document.body.clientWidth,
     height:document.body.clientHeight,,
 	bgcolor:'transparent'
@@ -26,7 +36,7 @@ var sketch=new Sketch('canvas',{
     multi:false
 });
 
-// @event 
+// @event
 // start 开始绘画
 // move 绘画中
 // end 绘画结束
@@ -53,9 +63,8 @@ sketch.color='green';
 
 // erase擦除
 sketch.erase=true; //该属性为true时表示是擦除状态
+```
 
+## DEMO
 
-````
-
-## DEMO 
-http://u.boy.im/sketch/demo
+http://github.boy.im/sketch/
