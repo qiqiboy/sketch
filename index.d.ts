@@ -11,7 +11,7 @@ export as namespace SketchLit;
 declare namespace SketchLit {
     interface SketchLitConfig {
         color?: string;
-        bgColor?: string;
+        bgcolor?: string;
         lineWidth?: number;
         width?: number;
         height?: number;
@@ -20,7 +20,7 @@ declare namespace SketchLit {
 
     interface SketchLit {
         color: string;
-        bgColor: string;
+        bgcolor: string;
         lineWidth: number;
         width: number;
         height: number;
@@ -33,13 +33,14 @@ declare namespace SketchLit {
 
         clear(): SketchLit;
         cancel(step?: number): SketchLit;
+        reDraw(): SketchLit;
         toBlob: HTMLCanvasElement['toBlob'];
         toDataUrl: HTMLCanvasElement['toDataURL'];
         toDataURL: HTMLCanvasElement['toDataURL'];
+        destroy(): SketchLit;
+        
         on(action: 'start' | 'move', callback: (x: number, y: number, pointerId: number) => void): SketchLit;
         on(action: 'end', callback: (pointerId: number) => void): SketchLit;
-
-        destroy(): SketchLit;
     }
 
     interface SketchLitConstructor {

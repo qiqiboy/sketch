@@ -316,7 +316,7 @@
     } else if (typeof exports === 'object') {
         module.exports = struct;
     } else {
-        ROOT.Sketch=struct;
+        ROOT.SketchLit=struct;
     }
 })(window, function(id,config){
     if(!(this instanceof arguments.callee)){
