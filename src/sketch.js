@@ -282,6 +282,11 @@
                 }
                 callback(new Blob([buffer.buffer],{type:type||dataUrl[0].split(/[:;]/)[1]}));
             }).apply(this.canvas,arguments);
+        },
+        destroy:function(){
+            evs.forEach(function(ev){
+                this.canvas.removeEventListener(ev, this);
+            }.bind(this));
         }
     }
 

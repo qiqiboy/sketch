@@ -37,7 +37,7 @@ declare namespace SketchLit {
         toBlob: HTMLCanvasElement['toBlob'];
         toDataUrl: HTMLCanvasElement['toDataURL'];
         toDataURL: HTMLCanvasElement['toDataURL'];
-        destroy(): SketchLit;
+        destroy(): void;
         
         on(action: 'start' | 'move', callback: (x: number, y: number, pointerId: number) => void): SketchLit;
         on(action: 'end', callback: (pointerId: number) => void): SketchLit;
