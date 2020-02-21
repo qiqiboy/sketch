@@ -1,15 +1,15 @@
-// Type definitions for sketch-lit
-// Project: Sketch-lit
+// Type definitions for sketch-lite
+// Project: Sketch-lite
 // Definitions by: qiqiboy
 
-declare const SketchLit: SketchLit.SketchLitConstructor;
+declare const SketchLite: SketchLite.SketchLiteConstructor;
 
-export = SketchLit;
+export = SketchLite;
 
-export as namespace SketchLit;
+export as namespace SketchLite;
 
-declare namespace SketchLit {
-    interface SketchLitConfig {
+declare namespace SketchLite {
+    interface SketchLiteConfig {
         color?: string;
         bgcolor?: string;
         lineWidth?: number;
@@ -18,7 +18,7 @@ declare namespace SketchLit {
         multi?: boolean;
     }
 
-    interface SketchLit {
+    interface SketchLite {
         color: string;
         bgcolor: string;
         lineWidth: number;
@@ -31,20 +31,20 @@ declare namespace SketchLit {
         canvas: HTMLCanvasElement;
         ctx: CanvasRenderingContext2D;
 
-        clear(): SketchLit;
-        cancel(step?: number): SketchLit;
-        reDraw(): SketchLit;
+        clear(): SketchLite;
+        cancel(step?: number): SketchLite;
+        reDraw(): SketchLite;
         toBlob: HTMLCanvasElement['toBlob'];
         toDataUrl: HTMLCanvasElement['toDataURL'];
         toDataURL: HTMLCanvasElement['toDataURL'];
         destroy(): void;
         
-        on(action: 'start' | 'move', callback: (x: number, y: number, pointerId: number) => void): SketchLit;
-        on(action: 'end', callback: (pointerId: number) => void): SketchLit;
+        on(action: 'start' | 'move', callback: (x: number, y: number, pointerId: number) => void): SketchLite;
+        on(action: 'end', callback: (pointerId: number) => void): SketchLite;
     }
 
-    interface SketchLitConstructor {
-        new (idOrElement: string | HTMLElement, config?: SketchLitConfig): SketchLit;
-        (idOrElement: string | HTMLElement, config?: SketchLitConfig): SketchLit;
+    interface SketchLiteConstructor {
+        new (idOrElement: string | HTMLElement, config?: SketchLiteConfig): SketchLite;
+        (idOrElement: string | HTMLElement, config?: SketchLiteConfig): SketchLite;
     }
 }

@@ -1,21 +1,21 @@
 # Sketch-Lit
 
-Just a HTML5 sketch-pad.
+Just a HTML5 sketch-pad based on canvas.
 简易 H5 画板，支持绘画与擦除
 
 ## 安装
 
 ```bash
 # Use npm
-$ npm install sketch-lit --save
+$ npm install sketch-lite --save
 # Use Yarn
-$ yarn add sketch-lit
+$ yarn add sketch-lite
 ```
 
 ## 如何使用
 
 ```javascript
-var SketchLit = require('sketch-lit');
+var SketchLite = require('sketch-lite');
 
 // @Class Sketch
 // @param String|HTMLCanvasElement id canvas节点id或者该对象
@@ -27,10 +27,10 @@ var SketchLit = require('sketch-lit');
 //                      .bgcolor 背景颜色
 //                      .multi 是否支持多指同时绘画
 
-var sketch=new SketchLit('canvas',{
+var sketch=new SketchLite('canvas',{
     width:document.body.clientWidth,
-    height:document.body.clientHeight,,
-	bgcolor:'transparent'
+    height:document.body.clientHeight,
+    bgcolor:'transparent'
     lineWidth:5,
     color:'red',
     multi:false
