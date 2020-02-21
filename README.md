@@ -1,4 +1,4 @@
-# Sketch-Lit
+# Sketch Lite
 
 Just a HTML5 sketch-pad based on canvas.
 简易 H5 画板，支持绘画与擦除
