@@ -96,7 +96,7 @@
 
         return ev;
     }
-    
+
     struct.prototype={
         constructor:struct,
         lineWidth:5,
@@ -120,7 +120,7 @@
             }.bind(this));
 
             var tempPens=[];
-            
+
             this.on({
                 start:function(){
                     tempPens[arguments[2]]={
@@ -187,6 +187,9 @@
                                 this.fire('move',pointer.clientX-rect.left,pointer.clientY-rect.top,pointer.id);
                             }.bind(this));
                         }
+                    }
+                    if (this.moving && this.pointerType !== 'touch' && ev.eventType === 'touch') {
+                         ev.preventDefault();
                     }
                     break;
                 case 3:
@@ -291,7 +294,7 @@
     }
 
     if(typeof Object.defineProperties=='function'){
-        
+
         "width height".split(" ").forEach(function(prop){
             Object.defineProperty(struct.prototype,prop,{
                 get:function(){
