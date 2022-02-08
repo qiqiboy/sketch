@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui" />
+	<title>Sketch demo</title>
+	<meta name="description" content="" />
+	<meta name="keywords" content="" />
+	<style type="text/css">
+		body,
+		div,
+		canvas,
+		img {
+			margin: 0;
+			padding: 0;
+			border: 0;
+		}
+
+		html,
+		body {
+			height: 100%;
+		}
+
+		#wrap {
+			min-height: 100%;
+			position: relative;
+			width: 100%;
+		}
+
+		#wrap canvas {
+			display: block;
+			width: 100%;
+			height: 100%;
+		}
+
+		.ctl {
+			position: absolute;
+			top: 10px;
+			text-align: center;
+			left: 0;
+			width: 100%;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="wrap">
+		<canvas id="canvas"></canvas>
+		<div class="ctl">
+			<button onclick="sketch.erase=false;">Painter</button><button
+				onclick="sketch.erase=true;">Eraser</button>
+			    <button onclick="sketch.lineWidth=2;">2px line</button><button
+				onclick="sketch.lineWidth=5;">5px line</button><button
+				onclick="sketch.lineWidth=10;">10px line</button>
+			<button onclick="sketch.color='red';">red</button><button
+				onclick="sketch.color='black';">black</button><button
+				onclick="sketch.color='blue';">blue</button>
+			<button onclick="sketch.cancel();">Undo</button>
+		</div>
+	</div>
+	<script type="text/javascript" src="../src/sketch.js"></script>
+	<script>
+		var sketch = new SketchLite('canvas', {
+			width: document.body.clientWidth,
+			height: document.body.clientHeight,
+			lineWidth: 5,
+			color: 'red',
+			multi: false
+		});
+	</script>
+</body>
+
+</html>
