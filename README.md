@@ -3,6 +3,8 @@
 Just a HTML5 sketch-pad based on canvas.
 简易 H5 画板，支持绘画与擦除
 
+[English Document](./en/README.md)
+
 ## 安装
 
 ```bash
